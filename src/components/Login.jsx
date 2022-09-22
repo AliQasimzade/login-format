@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useFormik } from "formik";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { userData } from "./atoms";
+import { userData } from "../store/atoms";
 import { useRecoilValue } from "recoil";
-import { auth } from "./firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -18,16 +18,7 @@ const Login = () => {
   const linkRef = useRef("");
   const [user, setUser] = useState([]);
   const Users = useRecoilValue(userData);
-  const [log, setLog] = useState(false);
-  const [flag, setFlag] = useState(false);
-  let history = useHistory();
-
-  useEffect(() => {
-    console.log(log);
-    console.log(Users);
-    history.push(log && "/user");
-    history.push(flag && "/user");
-  }, [Users, log, flag]);
+  let navigate = useNavigate();
 
   const login = async () => {
     try {
@@ -37,9 +28,8 @@ const Login = () => {
         passWordRef.current.value
       );
 
-      let cond = true;
       alert("Success");
-      setLog(cond);
+      navigate("/user")
     } catch (error) {
       alert(error);
     }
@@ -47,12 +37,9 @@ const Login = () => {
   const googleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      const res = await signInWithPopup(auth, provider);
-      console.log(res.user.providerData[0]);
-      let cond = true;
+       await signInWithPopup(auth, provider);
       alert("Success");
-      setFlag(cond);
-      console.log(flag);
+      navigate("/user")
     } catch (error) {
       console.log(error.message);
     }
@@ -101,7 +88,7 @@ const Login = () => {
     <div className="Auth-form-container">
       <form className="Auth-form" onSubmit={formik.handleSubmit}>
         <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign In</h3>
+          <h3 className="Auth-form-title">Login</h3>
           <div className="form-group mt-3">
             <label>Email address</label>
             <input
@@ -144,7 +131,7 @@ const Login = () => {
           </div>
           <div className="d-grid gap-2 mt-3">
             <button className="btn btn-primary" ref={linkRef}>
-              Submit
+              Login
             </button>
           </div>
           <p className="forgot-password text-right mt-2">

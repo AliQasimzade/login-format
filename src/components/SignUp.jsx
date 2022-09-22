@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { userData } from "./atoms";
+import { userData } from "../store/atoms";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
 const SignUp = () => {
   const nameRef = useRef(null);
   const surnameRef = useRef(null);
@@ -114,7 +114,7 @@ const SignUp = () => {
             </button>
           </div>
           <p className="forgot-password text-right mt-2">
-            You have account <Link to="/login">Sign In</Link>
+            You have account <Link to="/login">Login</Link>
           </p>
         </div>
       </form>
